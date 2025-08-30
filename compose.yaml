@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: static_files
+      dockerfile: static.Dockerfile
+    ports:
+      - 3000:8000
+    command: 
+    
+  backend:
+    build:
+      context: backendfastapi
+      dockerfile: backend.Dockerfile
+    ports:
+      - 8090:8000
+    #volumes:
+     # - ./backendfastapi/src:/app
+    develop:
+      watch:
+      - action: rebuild
+        path: backendfastapi/requirements.txt
+      - action: rebuild
+        path: backendfastapi/backend.Dockerfile
+      - action: sync
+        path: backendfastapi/src
+        target: /app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
