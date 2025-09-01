@@ -1,3 +1,0 @@
-POSTGRES_USER=testing
-POSTGRES_PASSWORD=pass
-POSTGRES_DB=testing
