@@ -1,18 +1,14 @@
 services:
-  app:
-    build:
-      context: static_files
-      dockerfile: Dockerfile
-    ports:
-      - 3000:8000
-    command: 
-    
   backend:
     build:
       context: backendfastapi
       dockerfile: Dockerfile
     ports:
       - 8090:8000
+    depends_on:
+      - db_service
+    env_file:
+      - .env
     #volumes:
      # - ./backendfastapi/src:/app
     develop:
@@ -25,3 +21,14 @@ services:
         path: backendfastapi/src
         target: /app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+  db_service:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    env_file:
+      - .db_env
+    volumes:
+      - managed_db_data:/var/lib/postgresql/data
+
+volumes:
+  managed_db_data:
